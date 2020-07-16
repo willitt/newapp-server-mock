@@ -38,8 +38,11 @@ const typeDefs = gql`
     }
 
     type Mutation {
+        AddTeamMember(teamId: ID!, role: String!, newMemberEmail: String!): Member
         CreateTeam(userId: ID!, name: String!, plan: String!): Team
         EditUser(userId: ID!, userName: String, email: String, firstName: String, lastName: String): User
+        EditTeamMemberRole(teamId: ID!, memberId: ID!, role: String!): Member
+        RemoveTeamMember(teamId: ID!, memberId: ID!): Team
         UpdatePassword(userId: ID!, currentPassword: String!, newPassword: String!): Boolean
     }
 `;
@@ -87,6 +90,14 @@ const resolvers = {
         }
     },
     Mutation: {
+        AddTeamMember: (obj, args) => {
+            return {
+                _id: 'newb2',
+                userName: 'Newbie',
+                email: args.newMemberEmail,
+                role: args.role,
+            };
+        },
         CreateTeam: (obj, args, context, info) => {
             return {
                 _id: `${Math.round(Math.random()* Math.pow(10,6))}`,
@@ -108,6 +119,27 @@ const resolvers = {
                 firstName: args.firstName || 'Fakey',
                 lastName: args.lastName || 'Fake',
             }
+        },
+        EditTeamMemberRole: (obj, args) => {
+            return {
+                _id: `${Math.round(Math.random() * Math.pow(10, 6))}`,
+                userName: 'Fakey',
+                email: 'Fakey@fake.com',
+                role: args.role,
+            };
+        },
+        RemoveTeamMember: (obj, args) => {
+            return {
+                _id: `${Math.round(Math.random() * Math.pow(10, 6))}`,
+                name: 'FakeTeam6',
+                plan: 'BASIC',
+                members: [{
+                    _id: `${Math.round(Math.random() * Math.pow(10, 6))}`,
+                    userName: 'Fakey',
+                    email: 'Fakey@fake.com',
+                    role: 'OWNER'
+                }]
+            };
         },
         UpdatePassword: (obj, args) => {
             return true;
