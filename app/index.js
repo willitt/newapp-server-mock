@@ -33,6 +33,7 @@ const typeDefs = gql`
     }
 
     type Query {
+        Membership(userId: ID!, teamId: ID!): Member
         Team(userId: ID!, teamId: ID!): Team
         Teams(userId: ID!): [Team]
     }
@@ -49,6 +50,14 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
+        Membership: (obj, args) => {
+            return {
+                _id: args.userId,
+                role: 'OWNER',
+                userName: 'Fakey',
+                email: 'Fakey@fake.com',
+            };
+        },
         Team: (obj, args) => {
             return {
                 _id: `${Math.round(Math.random()* Math.pow(10,6))}`,
